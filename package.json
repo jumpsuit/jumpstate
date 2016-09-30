@@ -1,0 +1,64 @@
+{
+  "name": "jumpstate",
+  "version": "0.0.1",
+  "description": "Jump in. Zip up. Build great apps.",
+  "license": "MIT",
+  "homepage": "https://github.com/jumpsuit/jumpstate#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jumpsuit/jumpstate.git"
+  },
+  "keywords": [
+    "jumpsuit",
+    "state",
+    "redux",
+    "react"
+  ],
+  "preferGlobal": false,
+  "main": "lib/index.js",
+  "files": [
+    "lib/",
+    "jumpstate.js",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "test:lint": "standard --verbose | snazzy",
+    "test": "npm-run-all test:*",
+    "build:node": "rm -rf lib && babel src -d lib --no-comments",
+    "build:umd": "rm -rf jumpstate.js && browserify lib/index.js -s jumpstate -tg uglifyify -o jumpstate.js",
+    "watch": "npm run build:node -- -w -s",
+    "prepublish": "npm-run-all build:*"
+  },
+  "devDependencies": {
+    "babel-cli": "6.14.0",
+    "babel-eslint": "6.1.2",
+    "babel-preset-es2015": "6.14.0",
+    "babel-preset-react": "6.11.1",
+    "babel-preset-stage-2": "6.13.0",
+    "browserify": "13.1.0",
+    "npm-run-all": "3.1.0",
+    "snazzy": "5.0.0",
+    "standard": "8.0.0",
+    "uglifyify": "3.0.3"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "lib",
+      "jumpstate.js"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-2",
+      "react"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/jumpsuit/jumpstate/issues"
+  },
+  "dependencies": {},
+  "author": "Tanner Linsley <tannerlinsley@gmail.com>"
+}
