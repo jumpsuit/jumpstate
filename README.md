@@ -73,7 +73,8 @@ attachDispatcher(store, [counter])
 // or a single reducer
 attachDispatcher(store, counter)
 
-
+// HINT: Want to fire your own actions through the redux dispather?
+// See the `Use as an action creator` section below ;)
 
 // Somewhere else in your app...
 
