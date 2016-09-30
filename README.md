@@ -115,7 +115,7 @@ counter.setNote('Hello!', true)
 // { count: 1, note: '!olleH' }
 ```
 
-#### Configuration
+## Configuration
 Each state can be configured with some optional settings:
 ```javascript
 Jumpstate({
@@ -129,7 +129,7 @@ Jumpstate({
 })
 ```
 
-#### Passing multiple parameters
+## Passing multiple parameters
 Jumpstate differs from redux in that you can send multiple parameters when calling an action.
 
 ```javascript
@@ -148,7 +148,7 @@ In your action, each parameter follows after the current state
 }
 ```
 
-#### Use as an action creator
+## Use as an action creator
 If you can't seem to get away from dispatching actions in the traditional sense, you can configure a Jumpstate to behave like an action creator like so:
 
 ```javascript
