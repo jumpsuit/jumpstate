@@ -122,7 +122,7 @@ Jumpstate({
   name: 'myState' // This name is used in redux actions and for debugging. Defaults to a random unique short_id if not specified
   detached: false // If a state is detached it will not attempt to use redux. Defaults to `false`
   autoAssign: true // Jumpstate auto assign's your action returns into a new state instance to maintain state immutability. eg. `Object.assign({}, state, newState)`  If you would like to manage your own immutability, set this to false.
-  actionsOnly: false // If you would rather your jumpstate behave like an action creator, set this option to `true`, call an action with a payload, and you will receive a dispatchable action.
+  actionCreator: false // If you would rather your jumpstate behave like an action creator, set this option to `true`, call an action with a payload, and you will receive a dispatchable action.
 }, {
   initial: {},
   ...actions
@@ -153,7 +153,7 @@ If you can't seem to get away from dispatching actions in the traditional sense,
 
 ```javascript
 const counter = Jumpstate({
-  actionsOnly: true
+  actionCreator: true
 }, {
   initial: {count: 0},
   increment (state, amount) {...}

@@ -1,7 +1,7 @@
 export const jumpstateDefaults = {
   autoAssign: true,
   detached: false,
-  actionsOnly: false
+  actionCreator: false
 }
 
 export default function (...args) {
@@ -67,7 +67,7 @@ export default function (...args) {
         payload: multiPayload ? payload : payload[0]
       }
 
-      if (config.actionsOnly) {
+      if (config.actionsCreator) {
         return action
       }
       if (config.detached) {
