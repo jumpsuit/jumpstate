@@ -5,7 +5,6 @@ export const jumpstateDefaults = {
 }
 
 export default function (...args) {
-
   // Detect Optional Config Object
   const hasConfig = args.length > 1
   let userConfig = hasConfig ? args[0] : {}
@@ -18,10 +17,9 @@ export default function (...args) {
     }
   }
 
-  const config = Object.assign(defaultConfig, {
+  const config = Object.assign(jumpstateDefaults, {
     name: shortID()
   }, userConfig)
-
 
   // Checks
   if (typeof config.name === 'string' && !config.name.length) {
