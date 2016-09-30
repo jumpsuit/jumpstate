@@ -1,24 +1,27 @@
-export default function (...args) {
-  const defaultConfig = {
-    name: shortID(),
-    autoAssign: true
-  }
+export const jumpstateDefaults = {
+  autoAssign: true,
+  detached: false,
+  actionsOnly: false
+}
 
-  let config = defaultConfig
-  let actions = args[0]
+export default function (...args) {
 
   // Detect Optional Config Object
-  if (args.length > 1) {
-    config = Object.assign(defaultConfig, args[0])
-    actions = args[1]
-  }
+  const hasConfig = args.length > 1
+  let userConfig = hasConfig ? args[0] : {}
+  const actions = hasConfig ? args[1] : args[0]
 
   // Detect string name in place of config
-  if (typeof config === 'string') {
-    config = {
+  if (typeof userConfig === 'string') {
+    userConfig = {
       name: config
     }
   }
+
+  const config = Object.assign(defaultConfig, {
+    name: shortID()
+  }, userConfig)
+
 
   // Checks
   if (typeof config.name === 'string' && !config.name.length) {
@@ -62,6 +65,10 @@ export default function (...args) {
         },
         type: prefixedActionName,
         payload: multiPayload ? payload : payload[0]
+      }
+
+      if (config.actionsOnly) {
+        return action
       }
       if (config.detached) {
         // If it's a detached state, bypass the redux dispatcher

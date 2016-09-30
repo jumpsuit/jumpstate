@@ -3,7 +3,7 @@
 Jumpstate is a dead-simple state machine for Redux and Vanilla JS that packs some serious power and some awesome key features:
 
 - Provides methods instead of actions and a dispatcher
-- No Action Constants or Action Creators
+- Concise and small. No action constants or creators required
 - No more repetitive `dispatch`ing
 - Supports Redux and Vanilla JS
 
@@ -122,6 +122,7 @@ Jumpstate({
   name: 'myState' // This name is used in redux actions and for debugging. Defaults to a random unique short_id if not specified
   detached: false // If a state is detached it will not attempt to use redux. Defaults to `false`
   autoAssign: true // Jumpstate auto assign's your action returns into a new state instance to maintain state immutability. eg. `Object.assign({}, state, newState)`  If you would like to manage your own immutability, set this to false.
+  actionsOnly: false // If you would rather your jumpstate behave like an action creator, set this option to `true`, call an action with a payload, and you will receive a dispatchable action.
 }, {
   initial: {},
   ...actions
@@ -145,6 +146,24 @@ In your action, each parameter follows after the current state
     tags === [1,2,3,4] // true
   }
 }
+```
+
+#### Use as an action creator
+If you can't seem to get away from dispatching actions in the traditional sense, you can configure a Jumpstate to behave like an action creator like so:
+
+```javascript
+const counter = Jumpstate({
+  actionsOnly: true
+}, {
+  initial: {count: 0},
+  increment (state, amount) {...}
+})
+
+// Call the action with a payload
+const incrementAction = counter.increment(2)
+
+// Dispatch away
+dispatch(incrementAction)
 ```
 
 ## Help and Contributions
