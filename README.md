@@ -117,6 +117,7 @@ counter.setNote('Hello!', true)
 ```
 
 ## Configuration
+
 Each state can be configured with some optional settings:
 ```javascript
 Jumpstate({
@@ -127,6 +128,18 @@ Jumpstate({
 }, {
   initial: {},
   ...actions
+})
+```
+
+You can also set global settings like so:
+```javascript
+import { jumpstateDefaults } from 'jumpstate'
+
+jumpstateDefaults.actionCreator = true
+// or
+Object.assign(jumpstateDefaults, {
+  detached: true,
+  autoAssign: false,
 })
 ```
 
