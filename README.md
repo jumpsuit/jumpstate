@@ -1,11 +1,17 @@
 # Jumpstate
 
-Jumpstate is a very simple method-driven Redux-compatible state machine that packs some serious power and some awesome key features:
+Jumpstate is a dead-simple state machine for Redux and Vanilla JS that packs some serious power and some awesome key features:
 
-- No Action Creators
-- No Action Constants
-- No Dispatcher required
+- Provides methods instead of actions and a dispatcher
+- No Action Constants or Action Creators
+- No more repetitive `dispatch`ing
 - Supports Redux and Vanilla JS
+
+#### Why do we love it?
+- It has encouraged us to use clear and deliberate imports and dependencies to manipulate our state.
+- It has reduced the amount of code we maintain for our state by 30%
+- It's easy to learn and reads well
+- It's testable and predictable
 
 *Did you know? Jumpstate used to be exclusively available in [Jumpsuit](https://github.com/jumpsuit/jumpsuit), but we think it's meant for bigger things and can't wait to see what you do with it!*
 
