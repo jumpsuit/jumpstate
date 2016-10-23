@@ -65,7 +65,7 @@ export default function (...args) {
         payload: multiPayload ? payload : payload[0]
       }
 
-      if (config.actionsCreator) {
+      if (config.actionCreator) {
         return action
       }
       if (config.detached) {
