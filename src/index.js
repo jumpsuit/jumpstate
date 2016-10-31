@@ -13,7 +13,7 @@ export default function (...args) {
   // Detect string name in place of config
   if (typeof userConfig === 'string') {
     userConfig = {
-      name: config
+      name: userConfig
     }
   }
 
@@ -118,6 +118,6 @@ export function attachDispatcher (store, input) {
 }
 
 function shortID () {
-  // returns a fairly uniqe 4 digit UUID for default state names
+  // returns a fairly unique 4 digit UUID for default state names
   return ('0000' + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4)
 }
