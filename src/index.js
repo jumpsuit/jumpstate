@@ -17,9 +17,9 @@ export default function (...args) {
     }
   }
 
-  const config = Object.assign(jumpstateDefaults, {
+  const config = Object.assign({
     name: shortID()
-  }, userConfig)
+  }, jumpstateDefaults, userConfig)
 
   // Checks
   if (typeof config.name === 'string' && !config.name.length) {
