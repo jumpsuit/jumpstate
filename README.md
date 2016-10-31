@@ -24,7 +24,7 @@ $ npm install jumpstate --save
 ## Redux Usage
 
 ```javascript
-import { combineReducers } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import Jumpstate, { attachDispatcher } from 'jumpstate'
 
 // Creating a jumpstate is as simple as passing an initial
@@ -42,7 +42,7 @@ const counter = Jumpstate({
     return { count: state.count + 1 }
     // State is always immutable, so by default, jumpstate
     // will autoAssign your return value to a new
-    // state object.  If you would like to manage your
+    // state object. If you would like to manage your
     // own immutability, set `autoAssign: false` in the
     // state's config.
   },
@@ -79,13 +79,16 @@ attachDispatcher(store, counter)
 // Somewhere else in your app...
 
 // Get the current State
-counter()
+console.log(counter())
 // { count: 0, note: '' }
 
 // Call some actions
 counter.increment()
+console.log(counter())
 // { count: 1, note: '' }
+
 counter.setNote('Hello!', true)
+console.log(counter())
 // { count: 1, note: '!olleH' }
 ```
 
@@ -106,13 +109,13 @@ const counter = Jumpstate({
 })
 
 // Get the current State
-counter()
+console.log(counter())
 // { count: 0, note: '' }
 
 // Call some actions
-counter.increment()
+console.log(counter.increment())
 // { count: 1, note: '' }
-counter.setNote('Hello!', true)
+console.log(counter.setNote('Hello!', true))
 // { count: 1, note: '!olleH' }
 ```
 
