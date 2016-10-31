@@ -8,7 +8,7 @@ Jumpstate is a dead-simple state machine for Redux and Vanilla JS that packs som
 - Supports Redux and Vanilla JS
 
 #### Why do we love it?
-- It has encouraged us to use clear and deliberate imports and dependencies to manipulate our state.
+- It has encouraged us to use clear and deliberate imports and dependencies to manipulate our state
 - It has reduced the amount of code we maintain for our state by 30%
 - It's easy to learn and reads well
 - It's testable and predictable
@@ -56,7 +56,7 @@ const counter = Jumpstate({
   }
 })
 
-// Regular redux
+// Regular Redux
 const reducers = {
   counter,
 }
@@ -66,14 +66,14 @@ const store = createStore(rootReducer)
 // After the store is created, we just need to supply
 // our jumpstate's with the store dispatcher.
 
-// You can pass pass it your reducer map
+// You can pass it your reducer map
 attachDispatcher(store, reducers)
 // or an array of reducers
 attachDispatcher(store, [counter])
 // or a single reducer
 attachDispatcher(store, counter)
 
-// HINT: Want to fire your own actions through the redux dispather?
+// HINT: Want to fire your own actions through the Redux dispatcher?
 // See the `Use as an action creator` section below ;)
 
 // Somewhere else in your app...
@@ -91,7 +91,7 @@ counter.setNote('Hello!', true)
 
 ## Vanilla JS Usage
 
-Using jumpstate on it's own is exactly like the example above, with the exception of only importing `jumpstate` and setting `detached: true` in the optional config.
+Using jumpstate on its own is exactly like the example above, with the exception of only importing `jumpstate` and setting `detached: true` in the optional config.
 
 ```javascript
 import Jumpstate from 'jumpstate'
@@ -121,9 +121,9 @@ counter.setNote('Hello!', true)
 Each state can be configured with some optional settings:
 ```javascript
 Jumpstate({
-  name: 'myState' // This name is used in redux actions and for debugging. Defaults to a random unique short_id if not specified
-  detached: false // If a state is detached it will not attempt to use redux. Defaults to `false`
-  autoAssign: true // Jumpstate auto assign's your action returns into a new state instance to maintain state immutability. eg. `Object.assign({}, state, newState)`  If you would like to manage your own immutability, set this to false.
+  name: 'myState' // This name is used in Redux actions and for debugging. Defaults to a random unique short_id if not specified
+  detached: false // If a state is detached it will not attempt to use Redux. Defaults to `false`
+  autoAssign: true // Jumpstate auto-assigns your action returns into a new state instance to maintain state immutability. eg. `Object.assign({}, state, newState)`  If you would like to manage your own immutability, set this to false.
   actionCreator: false // If you would rather your jumpstate behave like an action creator, set this option to `true`, call an action with a payload, and you will receive a dispatchable action.
 }, {
   initial: {},
@@ -144,13 +144,13 @@ Object.assign(jumpstateDefaults, {
 ```
 
 ## Passing multiple parameters
-Jumpstate differs from redux in that you can send multiple parameters when calling an action.
+Jumpstate differs from Redux in that you can send multiple parameters when calling an action.
 
 ```javascript
 myState.doSomething('Hello', true, [1,2,3,4])
 ```
 
-In your action, each parameter follows after the current state
+In your action, each parameter follows after the current state.
 
 ```javascript
 {
@@ -181,7 +181,7 @@ dispatch(incrementAction)
 ```
 
 ## Help and Contributions
-PR's and issues are welcome and wanted. Before submitting a feature-based PR, please file an issue to gauge its alignment with the goals of the project.
+PRs and issues are welcome and wanted. Before submitting a feature-based PR, please file an issue to gauge its alignment with the goals of the project.
 
 ## License
 
