@@ -39,7 +39,7 @@ const counter = Jumpstate({
   increment (state) {
     // Each action is passed the current state
     // and any parameters the action was called with
-    return { count: ++state.count }
+    return { count: state.count + 1 }
     // State is always immutable, so by default, jumpstate
     // will autoAssign your return value to a new
     // state object.  If you would like to manage your
@@ -47,18 +47,18 @@ const counter = Jumpstate({
     // state's config.
   },
   decrement (state) {
-    return { count: --state.count }
+    return { count: state.count - 1 }
   },
   setNote (state, note, reverse) {
     return {
-      reverse ? note.split('').reverse().join('') : note
+      note: reverse ? note.split('').reverse().join('') : note
     }
   }
 })
 
 // Regular redux
 const reducers = {
-  counter,
+  counter
 }
 const rootReducer = combineReducers(reducers)
 const store = createStore(rootReducer)
