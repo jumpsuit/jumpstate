@@ -39,7 +39,7 @@
     "browserify": "13.1.0",
     "npm-run-all": "3.1.0",
     "snazzy": "5.0.0",
-    "standard": "8.0.0",
+    "standard": "^8.0.0",
     "uglifyify": "3.0.3"
   },
   "standard": {
