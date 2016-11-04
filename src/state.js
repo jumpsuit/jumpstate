@@ -10,13 +10,13 @@ export default function (...args) {
   // Detect string name in place of config
   if (typeof userConfig === 'string') {
     userConfig = {
-      name: config
+      name: userConfig
     }
   }
 
-  const config = Object.assign(jumpstateDefaults, {
+  const config = Object.assign({
     name: Utils.shortID()
-  }, userConfig)
+  }, jumpstateDefaults, userConfig)
 
   // Checks
   if (typeof config.name === 'string' && !config.name.length) {
@@ -35,8 +35,7 @@ export default function (...args) {
       return currentState
     }
     // Compute the next state
-    const payload = action._jumpstate.multiPayload ? action.payload : [action.payload]
-    const nextState = prefixedActions[action.type](state, ...payload)
+    const nextState = prefixedActions[action.type](state, ...action.payload)
     currentState = config.autoAssign ? Object.assign({}, state, nextState) : nextState
     // If autoAssign is on, extend the state to avoid mutation
     return currentState
@@ -51,15 +50,9 @@ export default function (...args) {
 
     // Create a method at reducer[actionName] to call our action
     reducerWithActions[actionName] = (...payload) => {
-      const multiPayload = payload.length > 1
       const action = {
-        _jumpstate: {
-          stateName: config.name,
-          actionName: actionName,
-          multiPayload: multiPayload
-        },
         type: prefixedActionName,
-        payload: multiPayload ? payload : payload[0]
+        payload
       }
 
       if (config.actionCreator) {
@@ -76,7 +69,7 @@ export default function (...args) {
     }
 
     // makes actions available directly when testing with an _ prefix
-    if (process.env.NODE_ENV === 'testing') {
+    if (typeof process !== 'undefined' && process.env.NODE_ENV === 'testing') {
       reducerWithActions[`_${actionName}`] = actions[actionName]
     }
   })
