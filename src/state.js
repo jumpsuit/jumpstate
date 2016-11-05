@@ -1,5 +1,12 @@
-import jumpstateDefaults from './defaults'
 import Utils from './utils'
+import { dispatch } from './middleware'
+import { addAction, addStateAction } from './actions'
+
+export const StateDefaults = {
+  autoAssign: true,
+  detached: false,
+  actionCreator: false
+}
 
 export default function (...args) {
   // Detect Optional Config Object
@@ -14,28 +21,43 @@ export default function (...args) {
     }
   }
 
+  let stateName
+  if (userConfig.name) {
+    stateName = userConfig.name.split('')
+    stateName = stateName[0].toUpperCase() + stateName.slice(1).join('')
+  }
+
   const config = Object.assign({
     name: Utils.shortID()
-  }, jumpstateDefaults, userConfig)
+  }, StateDefaults, userConfig)
 
   // Checks
   if (typeof config.name === 'string' && !config.name.length) {
-    throw new Error('Jumpstate requires a name if defined in config')
+    throw new Error('States require a name when defined with a config')
   }
 
   // set the current state to the initial value
   let currentState = actions.initial || null
   delete actions.initial
 
-  const prefixedActions = {}
+  const namespacedMethods = {}
 
   const reducerWithActions = (state = currentState, action = {}) => {
     // If action doesn't exist, return the cached current state
-    if (!action || !prefixedActions[action.type]) {
+    if (!action) {
       return currentState
     }
-    // Compute the next state
-    const nextState = prefixedActions[action.type](state, ...action.payload)
+    let nextState
+    if (namespacedMethods[action.type]) {
+      // For namespaced actions, look for the prefixedAction
+      nextState = namespacedMethods[action.type](state, action.payload)
+    } else if (actions[action.type]) {
+      // For namespaced actions, look for the prefixedAction
+      nextState = actions[action.type](state, action.payload)
+    } else {
+      // All other cases, just return the current state
+      return currentState
+    }
     currentState = config.autoAssign ? Object.assign({}, state, nextState) : nextState
     // If autoAssign is on, extend the state to avoid mutation
     return currentState
@@ -46,15 +68,14 @@ export default function (...args) {
     const prefixedActionName = `${config.name}_${actionName}`
 
     // Keep a reference to the original action for the reducer to reference
-    prefixedActions[prefixedActionName] = actions[actionName]
+    namespacedMethods[prefixedActionName] = actions[actionName]
 
-    // Create a method at reducer[actionName] to call our action
-    reducerWithActions[actionName] = (...payload) => {
+    // Create a namespaced action
+    const prefixedActionMethod = (payload) => {
       const action = {
         type: prefixedActionName,
         payload
       }
-
       if (config.actionCreator) {
         return action
       }
@@ -64,8 +85,32 @@ export default function (...args) {
         return reducerWithActions(currentState, action)
       } else {
         // Otherwise, proxy the action through the attached redux dispatcher
-        return reducerWithActions._dispatch(action)
+        return dispatch(action)
       }
+    }
+
+    // Create a generic action
+    const actionMethod = (payload) => {
+      const action = {
+        type: actionName,
+        payload
+      }
+      if (config.actionCreator) {
+        return action
+      }
+      // TODO: somehow support global actions with detached states
+      // Generic actions currently don't support detached states, so just dispatch for now
+      return dispatch(action)
+    }
+
+    // Attach the actionMethod to the reducer
+    reducerWithActions[actionName] = prefixedActionMethod
+
+    // Add the actionMethod to the global Actions list
+    addAction(actionName, actionMethod)
+    // If is a named State, add the prefixedActionMethod to the prefixed global Actions list
+    if (stateName) {
+      addStateAction(actionName, prefixedActionMethod, stateName)
     }
 
     // makes actions available directly when testing with an _ prefix
@@ -73,12 +118,6 @@ export default function (...args) {
       reducerWithActions[`_${actionName}`] = actions[actionName]
     }
   })
-
-  Object.assign(reducerWithActions, {
-    _config: config,
-    _isJumpstate: true
-  })
-  reducerWithActions._config = config
 
   return reducerWithActions
 }

@@ -1,9 +1,12 @@
-import State from './state'
-import attachDispatcher from './attachDispatcher'
-import jumpstateDefaults from './defaults'
+import State, { StateDefaults } from './state'
+import Effect from './effect'
+import Actions from './actions'
+import CreateJumpstateMiddleware from './middleware'
 
-module.exports = {
-  default: State,
-  attachDispatcher,
-  jumpstateDefaults
+export {
+  State,
+  Effect,
+  Actions,
+  StateDefaults,
+  CreateJumpstateMiddleware
 }
