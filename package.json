@@ -1,6 +1,6 @@
 {
   "name": "jumpstate",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "A dead-simple state machine for Redux and Vanilla JS",
   "license": "MIT",
   "homepage": "https://github.com/jumpsuit/jumpstate#readme",
