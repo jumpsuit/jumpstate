@@ -1,11 +1,14 @@
 # Jumpstate
 
-Jumpstate is a lightweight Redux utility that packs some serious power and some awesome features:
+Jumpstate is a lightweight state framework for React that packs some serious power and some awesome features:
 
-- Get all the benefits of Thunks, Sagas, and even Relay-like side-effects with no setup and no bloat
-- Concise and small. No action constants or creators required
-- No more repetitive `dispatch`ing
-- Powered by Redux under the hood
+- No action creators
+- No action constants
+- No dispatching required
+- Async actions
+- Named and generic side-effects model
+- Lightweight at **2kb**
+- Powered by Redux
 
 #### Why do we love it?
 - It provides a clear and deliberate way of managing state
