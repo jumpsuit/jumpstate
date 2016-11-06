@@ -32,6 +32,7 @@ import { State, Effect, Actions, getState, dispatch, CreateJumpstateMiddleware }
 import { createStore, combineReducers } from 'redux'
 import { connect } from 'redux-react'
 
+
 // Create a generic reducer with some actions
 const Counter = State({
   // Initial State
@@ -45,6 +46,7 @@ const Counter = State({
   },
 })
 
+
 // You can create asynchronous actions like this:
 const asyncIncrement = Effect('asyncIncrement', (time = 1000) => {
   setTimeout(() => Actions.increment(), time)
@@ -54,6 +56,8 @@ asyncIncrement()
 // Or even via the global actions list
 Actions.asyncIncrement()
 
+
+
 // You can even create generic side-effects (like sagas, but 10x easier)
 // You can monitor your state for any action or state condition, and then respond however you want.
 Effect((action, getState) => {
@@ -62,6 +66,8 @@ Effect((action, getState) => {
     Math.random() > .5 ? Actions.increment() : Actions.decrement()
   }
 })
+
+
 
 // You can setup your redux however you like...
 const reducers = {
