@@ -2,14 +2,14 @@
 
 Jumpstate is a lightweight Redux utility that packs some serious power and some awesome features:
 
-- Get all the benefits of Thunks, Sagas, and even Relay-like side-effects without the bloat
+- Get all the benefits of Thunks, Sagas, and even Relay-like side-effects with no setup and no bloat
 - Concise and small. No action constants or creators required
 - No more repetitive `dispatch`ing
 - Powered by Redux under the hood
 
 #### Why do we love it?
-- It provides a clear and deliberate way of managing our state
-- It has reduced the amount of code we maintain for our state by more than 30%
+- It provides a clear and deliberate way of managing state
+- It has reduced the amount of code we maintain for state and actions by more than 30%
 - It's easy to learn and reads extremely well
 
 *Did you know? Jumpstate is the core state-manager for [Jumpsuit](https://github.com/jumpsuit/jumpsuit), So if you like what you see, you'll likely love Jumpsuit as well!*
@@ -23,12 +23,14 @@ $ npm install jumpstate --save
 ## Usage
 
 ```javascript
-import { State, Effect, Actions, GetState, Dispatch, CreateJumpstateMiddleware } from 'jumpstate'
+// Import Jumpstate Utils
+import { State, Effect, Actions, getState, dispatch, CreateJumpstateMiddleware } from 'jumpstate'
+// Redux stuff...
 import { createStore, combineReducers } from 'redux'
 import { connect } from 'redux-react'
 
-// Create a state with some actions
-const CounterState = State('counter', {
+// Create a generic reducer with some actions
+const Counter = State({
   // Initial State
   initial: { count: 0 },
   // Actions
@@ -40,31 +42,33 @@ const CounterState = State('counter', {
   },
 })
 
-// This is an async action.
-// It's even tracked in the state history :) eg. {type: 'asyncIncrement', payload: ...}
-Effect('asyncIncrement', () => {
-  setTimeout(() => CounterState.increment(), 1000)
+// You can create asynchronous actions like this:
+const asyncIncrement = Effect('asyncIncrement', (time = 1000) => {
+  setTimeout(() => Actions.increment(), time)
 })
+// You can call it with the return function
+asyncIncrement()
+// Or even via the global actions list
+Actions.asyncIncrement()
 
-// This is a generic side-effect.
-// You can monitor your state for any actions or state, and respond however you want.
+// You can even create generic side-effects (like sagas, but 10x easier)
+// You can monitor your state for any action or state condition, and then respond however you want.
 Effect((action, getState) => {
-  // Like never letting the count equal 10! Muahahaha
-  if (getState().CounterState.count === 10) {
-    Math.random() > .5 ? CounterState.increment() : CounterState.decrement()
+  // Like never letting the count equal 10! Muahahaha!!!
+  if (getState().counter.count === 10) {
+    Math.random() > .5 ? Actions.increment() : Actions.decrement()
   }
 })
 
+// You can setup your redux however you like...
+const reducers = {
+  counter: Counter
+}
 
 // To wire it up, create a new middleware instance from jumpstate
 const JumpstateMiddleware = CreateJumpstateMiddleware()
 
-// Then setup your redux however you like
-const reducers = {
-  counter: CounterState
-}
-
-// As long as you apply the jumpstate middleware to your store
+// As long as you apply the jumpstate middleware to your store, you're good to go!
 const store = createStore(
   combineReducers(reducers)
   applyMiddware(JumpstateMiddleware)
@@ -74,45 +78,18 @@ const store = createStore(
 
 // Now, anywhere else in your app...
 
-// Get the current State of a specific reducer
-console.log(CounterState())
-// { count: 0}
-
-// Call a specific action on the reducer itself!
-CounterState.increment()
-console.log(CounterState())
-// { count: 1}
-
-// Or call it using the action registry!
-Actions.Counter.increment()
-console.log(CounterState())
-// { count: 2}
-
-// Or call it as a global action, which will be handled by every reducer
+// Call an action!
 Actions.increment()
-console.log(CounterState())
-// { count: 3}
+// This will increment all counts by 1
 
-// Get the current global state anytime you want
-console.log(getState())
-// { counter: { count: 0} }
+// Async actions are easy to call as well
+Actions.asyncIncrement(2000) // To send a payload, just pass it in the function
 
-// Use the dispatcher anytime you want
+// Oh, and you can still use the dispatcher for old-school redux anytime you want
 dispatch(reduxFormActionCreator())
 ```
 
-## API
-- **State(name/config, actions)** - Creates a new state.
-  - `name/config` - an optional string or config object
-  - `actions` - an object of action functions including a required `initial` property
-- **Effect()** - Creates a new asynchronous action. Callable via the return function or via `Actions.myAsyncAction()`
-- **Actions** - A global registry of available actions.
-  - `myAction` - All global actions are attached to the root of `Actions`
-  - `StateName.myAction` - All state-specific actions are accessible via the state name (capitalized)
-- **GetState()** - Access the read-only global state at any time
-- **Dispatch()** - Dispatch any standard redux action at any time
-
-## Configuration
+## State Configuration
 
 Each state can be configured with some optional settings:
 ```javascript
@@ -134,6 +111,30 @@ jumpstateDefaults.autoAssign = false
 Object.assign(jumpstateDefaults, {
   autoAssign: false
 })
+```
+
+## Sandboxed States
+
+If you have ever wanted an action to only go through a single reducer, you can!
+Sandboxed states only respond to actions called via their reducer.
+
+```javascript
+// Create a sandboxed state by passing a name
+const SandboxedCounter = State('otherCounter', {
+  // Initial State
+  initial: { count: 0 },
+  // Actions
+  increment (state, payload) {
+    return { count: ++state.count }
+  },
+  decrement (state, payload) {
+    return { count: --state.count }
+  },
+})
+
+// Call sandboxed actions using the reducer itself!
+SandboxedCounter.increment()
+// This action will only get called through this state
 ```
 
 ## Help and Contributions

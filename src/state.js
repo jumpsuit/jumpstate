@@ -1,11 +1,8 @@
-import Utils from './utils'
 import { dispatch } from './middleware'
-import { addAction, addStateAction } from './actions'
+import { addAction } from './actions'
 
 export const StateDefaults = {
-  autoAssign: true,
-  detached: false,
-  actionCreator: false
+  autoAssign: true
 }
 
 export default function (...args) {
@@ -27,9 +24,7 @@ export default function (...args) {
     stateName = stateName[0].toUpperCase() + stateName.slice(1).join('')
   }
 
-  const config = Object.assign({
-    name: Utils.shortID()
-  }, StateDefaults, userConfig)
+  const config = Object.assign({}, StateDefaults, userConfig)
 
   // Checks
   if (typeof config.name === 'string' && !config.name.length) {
@@ -37,81 +32,49 @@ export default function (...args) {
   }
 
   // set the current state to the initial value
-  let currentState = actions.initial || null
+  const initialState = actions.initial
   delete actions.initial
 
-  const namespacedMethods = {}
+  const namedActions = {}
 
-  const reducerWithActions = (state = currentState, action = {}) => {
+  const reducerWithActions = (state = initialState, action = {}) => {
     // If action doesn't exist, return the cached current state
     if (!action) {
-      return currentState
+      return state
     }
-    let nextState
-    if (namespacedMethods[action.type]) {
+    if (namedActions[action.type]) {
       // For namespaced actions, look for the prefixedAction
-      nextState = namespacedMethods[action.type](state, action.payload)
-    } else if (actions[action.type]) {
-      // For namespaced actions, look for the prefixedAction
-      nextState = actions[action.type](state, action.payload)
+      const nextState = namedActions[action.type](state, action.payload)
+      // If autoAssign is on, extend the state to avoid mutation
+      return config.autoAssign ? Object.assign({}, state, nextState) : nextState
     } else {
       // All other cases, just return the current state
-      return currentState
+      return state
     }
-    currentState = config.autoAssign ? Object.assign({}, state, nextState) : nextState
-    // If autoAssign is on, extend the state to avoid mutation
-    return currentState
   }
 
-  // Loop through the actions and determine if we should proxy through redux or not
+  // Loop through the actions and proxy them to do awesome stuff
   Object.keys(actions).forEach((actionName) => {
-    const prefixedActionName = `${config.name}_${actionName}`
+    const resolvedActionName = stateName ? `${config.name}_${actionName}` : actionName
 
     // Keep a reference to the original action for the reducer to reference
-    namespacedMethods[prefixedActionName] = actions[actionName]
+    namedActions[resolvedActionName] = actions[actionName]
 
     // Create a namespaced action
-    const prefixedActionMethod = (payload) => {
-      const action = {
-        type: prefixedActionName,
-        payload
-      }
-      if (config.actionCreator) {
-        return action
-      }
-      if (config.detached) {
-        // If it's a detached state, bypass the redux dispatcher
-        // and route actions directly into the reducer.
-        return reducerWithActions(currentState, action)
-      } else {
-        // Otherwise, proxy the action through the attached redux dispatcher
-        return dispatch(action)
-      }
-    }
-
-    // Create a generic action
     const actionMethod = (payload) => {
       const action = {
-        type: actionName,
+        type: resolvedActionName,
         payload
       }
-      if (config.actionCreator) {
-        return action
-      }
-      // TODO: somehow support global actions with detached states
-      // Generic actions currently don't support detached states, so just dispatch for now
+      // Otherwise, proxy the action through the attached redux dispatcher
       return dispatch(action)
     }
 
-    // Attach the actionMethod to the reducer
-    reducerWithActions[actionName] = prefixedActionMethod
+    // Attach the method to the reducer
+    reducerWithActions[actionName] = actionMethod
 
     // Add the actionMethod to the global Actions list
     addAction(actionName, actionMethod)
-    // If is a named State, add the prefixedActionMethod to the prefixed global Actions list
-    if (stateName) {
-      addStateAction(actionName, prefixedActionMethod, stateName)
-    }
 
     // makes actions available directly when testing with an _ prefix
     if (typeof process !== 'undefined' && process.env.NODE_ENV === 'testing') {
