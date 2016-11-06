@@ -1,19 +1,18 @@
 # Jumpstate
 
-Jumpstate is a dead-simple state machine for Redux and Vanilla JS that packs some serious power and some awesome key features:
+Jumpstate is a lightweight Redux utility that packs some serious power and some awesome features:
 
-- Provides methods instead of actions and a dispatcher
+- Get all the benefits of Thunks, Sagas, and even Relay-like side-effects without the bloat
 - Concise and small. No action constants or creators required
 - No more repetitive `dispatch`ing
-- Supports Redux and Vanilla JS
+- Powered by Redux under the hood
 
 #### Why do we love it?
-- It has encouraged us to use clear and deliberate imports and dependencies to manipulate our state
-- It has reduced the amount of code we maintain for our state by 30%
-- It's easy to learn and reads well
-- It's testable and predictable
+- It provides a clear and deliberate way of managing our state
+- It has reduced the amount of code we maintain for our state by more than 30%
+- It's easy to learn and reads extremely well
 
-*Did you know? Jumpstate used to be exclusively available in [Jumpsuit](https://github.com/jumpsuit/jumpsuit), but we think it's meant for bigger things and can't wait to see what you do with it!*
+*Did you know? Jumpstate is the core state-manager for [Jumpsuit](https://github.com/jumpsuit/jumpsuit), So if you like what you see, you'll likely love Jumpsuit as well!*
 
 ## Installation
 
@@ -21,113 +20,105 @@ Jumpstate is a dead-simple state machine for Redux and Vanilla JS that packs som
 $ npm install jumpstate --save
 ```
 
-## Redux Usage
+## Usage
 
 ```javascript
+import { State, Effect, Actions, GetState, Dispatch, CreateJumpstateMiddleware } from 'jumpstate'
 import { createStore, combineReducers } from 'redux'
-import Jumpstate, { attachDispatcher } from 'jumpstate'
+import { connect } from 'redux-react'
 
-// Creating a jumpstate is as simple as passing an initial
-// state value, and any actions that can alter that state
-const counter = Jumpstate({
+// Create a state with some actions
+const CounterState = State('counter', {
   // Initial State
-  initial: {
-    count: 0,
-    note: ''
-  },
+  initial: { count: 0 },
   // Actions
-  increment (state) {
-    // Each action is passed the current state
-    // and any parameters the action was called with
-    return { count: state.count + 1 }
-    // State is always immutable, so by default, jumpstate
-    // will autoAssign your return value to a new
-    // state object. If you would like to manage your
-    // own immutability, set `autoAssign: false` in the
-    // state's config.
+  increment (state, payload) {
+    return { count: ++state.count }
   },
-  decrement (state) {
-    return { count: state.count - 1 }
+  decrement (state, payload) {
+    return { count: --state.count }
   },
-  setNote (state, note, reverse) {
-    return {
-      note: reverse ? note.split('').reverse().join('') : note
-    }
+})
+
+// This is an async action.
+// It's even tracked in the state history :) eg. {type: 'asyncIncrement', payload: ...}
+Effect('asyncIncrement', () => {
+  setTimeout(() => CounterState.increment(), 1000)
+})
+
+// This is a generic side-effect.
+// You can monitor your state for any actions or state, and respond however you want.
+Effect((action, getState) => {
+  // Like never letting the count equal 10! Muahahaha
+  if (getState().CounterState.count === 10) {
+    Math.random() > .5 ? CounterState.increment() : CounterState.decrement()
   }
 })
 
-// Regular Redux
+
+// To wire it up, create a new middleware instance from jumpstate
+const JumpstateMiddleware = CreateJumpstateMiddleware()
+
+// Then setup your redux however you like
 const reducers = {
-  counter
+  counter: CounterState
 }
-const rootReducer = combineReducers(reducers)
-const store = createStore(rootReducer)
 
-// After the store is created, we just need to supply
-// our jumpstate's with the store dispatcher.
+// As long as you apply the jumpstate middleware to your store
+const store = createStore(
+  combineReducers(reducers)
+  applyMiddware(JumpstateMiddleware)
+)
 
-// You can pass it your reducer map
-attachDispatcher(store, reducers)
-// or an array of reducers
-attachDispatcher(store, [counter])
-// or a single reducer
-attachDispatcher(store, counter)
 
-// HINT: Want to fire your own actions through the Redux dispatcher?
-// See the `Use as an action creator` section below ;)
 
-// Somewhere else in your app...
+// Now, anywhere else in your app...
 
-// Get the current State
-console.log(counter())
-// { count: 0, note: '' }
+// Get the current State of a specific reducer
+console.log(CounterState())
+// { count: 0}
 
-// Call some actions
-counter.increment()
-console.log(counter())
-// { count: 1, note: '' }
+// Call a specific action on the reducer itself!
+CounterState.increment()
+console.log(CounterState())
+// { count: 1}
 
-counter.setNote('Hello!', true)
-console.log(counter())
-// { count: 1, note: '!olleH' }
+// Or call it using the action registry!
+Actions.Counter.increment()
+console.log(CounterState())
+// { count: 2}
+
+// Or call it as a global action, which will be handled by every reducer
+Actions.increment()
+console.log(CounterState())
+// { count: 3}
+
+// Get the current global state anytime you want
+console.log(getState())
+// { counter: { count: 0} }
+
+// Use the dispatcher anytime you want
+dispatch(reduxFormActionCreator())
 ```
 
-## Vanilla JS Usage
-
-Using jumpstate on its own is exactly like the example above, with the exception of only importing `jumpstate` and setting `detached: true` in the optional config.
-
-```javascript
-import Jumpstate from 'jumpstate'
-
-const counter = Jumpstate({
-  detached: true // Now this state is a simple state machine
-},{
-  initial: {...}, // see Redux example
-  increment (state) {...}, // see Redux example
-  decrement (state) {...}, // see Redux example
-  setNote (state, note, reverse) {...} // see Redux example
-})
-
-// Get the current State
-console.log(counter())
-// { count: 0, note: '' }
-
-// Call some actions
-console.log(counter.increment())
-// { count: 1, note: '' }
-console.log(counter.setNote('Hello!', true))
-// { count: 1, note: '!olleH' }
-```
+## API
+- **State(name/config, actions)** - Creates a new state.
+  - `name/config` - an optional string or config object
+  - `actions` - an object of action functions including a required `initial` property
+- **Effect()** - Creates a new asynchronous action. Callable via the return function or via `Actions.myAsyncAction()`
+- **Actions** - A global registry of available actions.
+  - `myAction` - All global actions are attached to the root of `Actions`
+  - `StateName.myAction` - All state-specific actions are accessible via the state name (capitalized)
+- **GetState()** - Access the read-only global state at any time
+- **Dispatch()** - Dispatch any standard redux action at any time
 
 ## Configuration
 
 Each state can be configured with some optional settings:
 ```javascript
-Jumpstate({
+State({
   name: 'myState' // This name is used in Redux actions and for debugging. Defaults to a random unique short_id if not specified
-  detached: false // If a state is detached it will not attempt to use Redux. Defaults to `false`
   autoAssign: true // Jumpstate auto-assigns your action returns into a new state instance to maintain state immutability. eg. `Object.assign({}, state, newState)`  If you would like to manage your own immutability, set this to false.
-  actionCreator: false // If you would rather your jumpstate behave like an action creator, set this option to `true`, call an action with a payload, and you will receive a dispatchable action.
 }, {
   initial: {},
   ...actions
@@ -138,49 +129,11 @@ You can also set global settings like so:
 ```javascript
 import { jumpstateDefaults } from 'jumpstate'
 
-jumpstateDefaults.actionCreator = true
+jumpstateDefaults.autoAssign = false
 // or
 Object.assign(jumpstateDefaults, {
-  detached: true,
-  autoAssign: false,
+  autoAssign: false
 })
-```
-
-## Passing multiple parameters
-Jumpstate differs from Redux in that you can send multiple parameters when calling an action.
-
-```javascript
-myState.doSomething('Hello', true, [1,2,3,4])
-```
-
-In your action, each parameter follows after the current state.
-
-```javascript
-{
-  doSomething (state, message, important, tags) {
-    message === 'Hello' // true
-    important === true // true
-    tags === [1,2,3,4] // true
-  }
-}
-```
-
-## Use as an action creator
-If you can't seem to get away from dispatching actions in the traditional sense, you can configure a Jumpstate to behave like an action creator like so:
-
-```javascript
-const counter = Jumpstate({
-  actionCreator: true
-}, {
-  initial: {count: 0},
-  increment (state, amount) {...}
-})
-
-// Call the action with a payload
-const incrementAction = counter.increment(2)
-
-// Dispatch away
-dispatch(incrementAction)
 ```
 
 ## Help and Contributions
