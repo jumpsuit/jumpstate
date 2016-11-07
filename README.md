@@ -96,33 +96,26 @@ React.createClass({
         <h1>Counter 1: { this.props.count }</h1>
         <h1>Counter 2: { this.props.count2 } <em>*Try to make me 10</em></h1>
         <h1>Sandboxed Counter: { this.props.sandboxCount }</h1>
-        <br />
-        <br />
-        {/* Call actions via the global Actions list */}
+
         <h3>Global Actions</h3>
         <button onClick={() => Actions.decrement()}>Decrement</button>
         <button onClick={() => Actions.increment()}>Increment</button>
-        <br />
         <button onClick={() => Actions.asyncIncrement()}>Increment after 1 sec.</button>
-        <br />
-        <br />
-        <br />
-        {/* To use a sandboxed state, call the actions attached to its reducer */}
+
         <h3>Sandboxed Actions</h3>
         <button onClick={() => SandboxCounter.decrement()}>Decrement</button>
         <button onClick={() => SandboxCounter.increment()}>Increment</button>
-        <br />
         <button onClick={() => Actions.asyncIncrement(true)}>Increment after 1 sec.</button>
       </div>
     )
   }
 })
 
-// You can take it from here...
-
-// Oh, and you can still use the dispatcher and getState for traditional redux anytime you want
+// You can still use the dispatcher and getState for traditional redux anytime you want
 dispatch(reduxFormActionCreator())
 console.log(getState()) // displays the current global state
+
+// You take it from here...
 ```
 
 ## Global States
