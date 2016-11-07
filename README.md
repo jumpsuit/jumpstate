@@ -80,7 +80,6 @@ const reducers = {
   sandboxCounter: SandboxCounter
 }
 
-// Setup Redux any way your heart desires...
 const store = createStore(
   combineReducers(reducers),
   // Just be sure to apply the Jumpstate Middlware :)
