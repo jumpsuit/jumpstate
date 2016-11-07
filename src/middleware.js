@@ -1,4 +1,5 @@
 import { EffectRegistry } from './effect'
+import { HookRegistry } from './hook'
 
 const warningFn = () => {
   console.warn(`It looks like you\'re trying to use Jumpstate without the middleware! For Jumpstate to work, you need to run CreateJumpstateMiddleware() and apply it as middleware to your Redux Store.`)
@@ -17,7 +18,10 @@ export default function createMiddleware (options) {
     return (next) => {
       return action => {
         const result = next(action)
-        EffectRegistry.forEach(effect => effect(action))
+        if (EffectRegistry[action.type]) {
+          EffectRegistry[action.type](action.payload)
+        }
+        HookRegistry.forEach(effect => effect(action))
         return result
       }
     }

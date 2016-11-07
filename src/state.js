@@ -1,34 +1,15 @@
 import { dispatch } from './middleware'
 import { addAction } from './actions'
 
-export const StateDefaults = {
-  autoAssign: true
-}
-
 export default function (...args) {
   // Detect Optional Config Object
-  const hasConfig = args.length > 1
-  let userConfig = hasConfig ? args[0] : {}
-  const actions = hasConfig ? args[1] : args[0]
-
-  // Detect string name in place of config
-  if (typeof userConfig === 'string') {
-    userConfig = {
-      name: userConfig
-    }
-  }
-
-  let stateName
-  if (userConfig.name) {
-    stateName = userConfig.name.split('')
-    stateName = stateName[0].toUpperCase() + stateName.slice(1).join('')
-  }
-
-  const config = Object.assign({}, StateDefaults, userConfig)
+  const isSandboxed = args.length > 1
+  let sandboxName = isSandboxed ? args[0] : undefined
+  const actions = isSandboxed ? args[1] : args[0]
 
   // Checks
-  if (typeof config.name === 'string' && !config.name.length) {
-    throw new Error('States require a name when defined with a config')
+  if (sandboxName && typeof sandboxName === 'string' && !sandboxName.length) {
+    throw new Error('Sandboxed states names must be a valid string')
   }
 
   // set the current state to the initial value
@@ -45,8 +26,8 @@ export default function (...args) {
     if (namedActions[action.type]) {
       // For namespaced actions, look for the prefixedAction
       const nextState = namedActions[action.type](state, action.payload)
-      // If autoAssign is on, extend the state to avoid mutation
-      return config.autoAssign ? Object.assign({}, state, nextState) : nextState
+      // Extend the state to avoid mutation
+      return Object.assign({}, state, nextState)
     } else {
       // All other cases, just return the current state
       return state
@@ -55,7 +36,7 @@ export default function (...args) {
 
   // Loop through the actions and proxy them to do awesome stuff
   Object.keys(actions).forEach((actionName) => {
-    const resolvedActionName = stateName ? `${config.name}_${actionName}` : actionName
+    const resolvedActionName = sandboxName ? `${sandboxName}_${actionName}` : actionName
 
     // Keep a reference to the original action for the reducer to reference
     namedActions[resolvedActionName] = actions[actionName]
@@ -74,7 +55,7 @@ export default function (...args) {
     reducerWithActions[actionName] = actionMethod
 
     // If global, add the actionMethod to the global Actions list
-    if (!stateName) {
+    if (!sandboxName) {
       addAction(actionName, actionMethod)
     }
 
