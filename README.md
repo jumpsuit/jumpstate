@@ -131,10 +131,10 @@ const counterReducer = State({
   initial: { count: 0 },
   // Actions
   increment (state, payload) {
-    return { count: ++state.count }
+    return { count: state.count + 1 }
   },
   decrement (state, payload) {
-    return { count: --state.count }
+    return { count: state.count - 1 }
   },
 })
 
@@ -146,6 +146,21 @@ const store = createStore({
 // And call global actions using jumpstate's `Actions` registry
 Actions.increment()
 ```
+
+## State Actions
+When you create a state, you assign action functions that can change that state in some way. When called, each action received the current `state`, and the `payload` that was passed with the call.
+
+It's important to not mutate the current state in these actions, and that you return how the state has changed.
+
+```javascript
+increment (state, payload) {
+  return {
+    count: state.count + 1
+  }
+},
+```
+
+In the example above, we created a new state with our updated count. Win!
 
 ## Sandboxed States
 Sandboxed states are namespaced and isolated from global events. Their state can only be modified by calling actions via their reducer methods. They also return a reducer that is redux-compatible out of the box.
@@ -159,10 +174,10 @@ const SandboxedCounter = State('otherCounter', {
   initial: { count: 0 },
   // Actions
   increment (state, payload) {
-    return { count: ++state.count }
+    return { count: state.count + 1 }
   },
   decrement (state, payload) {
-    return { count: --state.count }
+    return { count: state.count - 1 }
   },
 })
 
