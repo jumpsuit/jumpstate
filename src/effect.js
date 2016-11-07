@@ -24,10 +24,10 @@ export default function (...args) {
   EffectRegistry.push(effect)
 
   if (isNamedAction) {
-    const effectMethod = (...payload) => {
+    const effectMethod = (payload) => {
       return dispatch({
         type: actionName,
-        payload: payload
+        payload
       })
     }
 

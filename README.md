@@ -59,7 +59,7 @@ Actions.asyncIncrement()
 
 
 // You can even create generic side-effects (like sagas, but 10x easier)
-// You can monitor your state for any action or state condition, and then respond however you want.
+// Monitor your state for any action or state condition, and then respond however you want.
 Effect((action, getState) => {
   // Like never letting the count equal 10! Muahahaha!!!
   if (getState().counter.count === 10) {
