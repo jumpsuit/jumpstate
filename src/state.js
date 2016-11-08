@@ -18,20 +18,16 @@ export default function (...args) {
 
   const namedActions = {}
 
+  let currentState
+
   const reducerWithActions = (state = initialState, action = {}) => {
-    // If action doesn't exist, return the cached current state
-    if (!action) {
-      return state
-    }
     if (namedActions[action.type]) {
       // For namespaced actions, look for the prefixedAction
       const nextState = namedActions[action.type](state, action.payload)
       // Extend the state to avoid mutation
-      return Object.assign({}, state, nextState)
-    } else {
-      // All other cases, just return the current state
-      return state
+      currentState = Object.assign({}, state, nextState)
     }
+    return currentState
   }
 
   // Loop through the actions and proxy them to do awesome stuff
