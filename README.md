@@ -162,34 +162,6 @@ increment (state, payload) {
 
 In the example above, we created a new state with our updated count. Win!
 
-## Sandboxed States
-Sandboxed states are namespaced and isolated from global events. Their state can only be modified by calling actions via their reducer methods. They also return a reducer that is redux-compatible out of the box.
-
-```javascript
-import { State } from 'jumpstate'
-
-// Create a sandboxed state by passing a name as the first parameter
-const SandboxedCounter = State('otherCounter', {
-  // Initial State
-  initial: { count: 0 },
-  // Actions
-  increment (state, payload) {
-    return { count: state.count + 1 }
-  },
-  decrement (state, payload) {
-    return { count: state.count - 1 }
-  },
-})
-
-// Now you can use the reducer it returned in your redux setup
-const store = createStore({
-  sandboxedCounter: SandboxedCounter
-})
-
-// Sandboxed actions are only accessible through the methods on it's reducer!
-SandboxedCounter.increment()
-```
-
 ## Effects
 Effects, at their core, are asynchronous actions. They build on the concepts of [thunks](https://github.com/gaearon/redux-thunk) and [sagas](https://github.com/yelouafi/redux-saga) **but are much easier to understand and use**. Unlike thunks, Effects have their own redux actions, and their callback are executed **because** of those actions. You also gain all of the benefits of a side-effects model, without having to deal with the convoluted api of redux-saga.
 
@@ -237,6 +209,34 @@ All global actions (including effects) are available via the `Actions` object.
 ```javascript
 Actions.increment()
 Actions.myEffect()
+```
+
+## Sandboxed States
+Sandboxed states are namespaced and isolated from global events. Their state can only be modified by calling actions via their reducer methods. They also return a reducer that is redux-compatible out of the box.
+
+```javascript
+import { State } from 'jumpstate'
+
+// Create a sandboxed state by passing a name as the first parameter
+const SandboxedCounter = State('otherCounter', {
+  // Initial State
+  initial: { count: 0 },
+  // Actions
+  increment (state, payload) {
+    return { count: state.count + 1 }
+  },
+  decrement (state, payload) {
+    return { count: state.count - 1 }
+  },
+})
+
+// Now you can use the reducer it returned in your redux setup
+const store = createStore({
+  sandboxedCounter: SandboxedCounter
+})
+
+// Sandboxed actions are only accessible through the methods on it's reducer!
+SandboxedCounter.increment()
 ```
 
 
