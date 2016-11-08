@@ -18,7 +18,7 @@ export default function (...args) {
 
   const namedActions = {}
 
-  let currentState
+  let currentState = initialState
 
   const reducerWithActions = (state = initialState, action = {}) => {
     if (namedActions[action.type]) {
