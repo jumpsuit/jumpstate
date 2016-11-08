@@ -1,13 +1,5 @@
-import Actions, { addAction, removeAction } from '../src/actions'
+import State from '../src/state'
 
-test('Imports Actions', () => {
-  expect(Actions).toEqual({})
-})
-
-test('Add/Remove Action', () => {
-  const cb = () => {}
-  addAction('increment', cb)
-  expect(Actions.increment).toBeDefined()
-  removeAction('increment')
-  expect(Actions.increment).toBeUndefined()
+test('Import State', () => {
+  expect(State).toBeDefined()
 })

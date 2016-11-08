@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "test:lint": "standard --verbose | snazzy",
-    "test:unit": "jest",
+    "test:unit": "jest --coverage",
     "test": "npm-run-all test:*",
     "build:node": "rm -rf lib && babel src -d lib --no-comments",
     "build:umd": "rm -rf jumpstate.js && browserify lib/index.js -s jumpstate -tg uglifyify -o jumpstate.js",
