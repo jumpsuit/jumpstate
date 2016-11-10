@@ -2,6 +2,7 @@ import { getState, dispatch } from './middleware'
 import Actions, { addAction, removeAction } from './actions'
 
 export const EffectRegistry = {}
+const effectPromises = {}
 
 export default function (name, callback) {
   // Make sure the action name is a valid string
@@ -14,16 +15,24 @@ export default function (name, callback) {
     throw new Error(`An action called "${name}" already exists! Please pick another name for this effect!`)
   }
 
-  const callbackWrapper = (payload) => {
-    callback(payload, getState, dispatch)
+  const callbackWrapper = (action) => {
+    const { payload, ts } = action
+    Promise.resolve(callback(payload, getState, dispatch))
+      .then(effectPromises[ts].resolve)
+      .catch(effectPromises[ts].reject)
   }
 
   EffectRegistry[name] = callbackWrapper
 
   const eventDispatcher = (payload) => {
-    return dispatch({
-      type: name,
-      payload
+    const ts = Date.now()
+    return new Promise((resolve, reject) => {
+      effectPromises[ts] = { resolve, reject }
+      dispatch({
+        type: name,
+        payload,
+        ts
+      })
     })
   }
 

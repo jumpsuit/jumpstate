@@ -25,7 +25,7 @@ export default function createMiddleware (options) {
       return action => {
         const result = next(action)
         if (EffectRegistry[action.type]) {
-          EffectRegistry[action.type](action.payload)
+          EffectRegistry[action.type](action)
         }
         HookRegistry.forEach(effect => effect(action))
         return result
