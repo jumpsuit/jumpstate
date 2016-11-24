@@ -52,13 +52,6 @@
       "jumpstate.js"
     ]
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-2",
-      "react"
-    ]
-  },
   "bugs": {
     "url": "https://github.com/jumpsuit/jumpstate/issues"
   },
