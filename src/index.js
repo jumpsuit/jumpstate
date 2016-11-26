@@ -1,4 +1,4 @@
-import State, { StateDefaults } from './state'
+import State from './state'
 import Effect from './effect'
 import Hook from './hook'
 import Actions from './actions'
@@ -9,7 +9,6 @@ export {
   Effect,
   Hook,
   Actions,
-  StateDefaults,
   CreateJumpstateMiddleware,
   getState,
   dispatch
