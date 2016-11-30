@@ -20,14 +20,16 @@ export default function (...args) {
 
   let currentState = initialState
 
-  const reducerWithActions = (state = initialState, action = {}) => {
+  const reducerWithActions = (state, action = {}) => {
     if (namedActions[action.type]) {
       // For namespaced actions, look for the prefixedAction
       const nextState = namedActions[action.type](state, action.payload)
       // Extend the state to avoid mutation
-      currentState = Object.assign({}, state, nextState)
+      return Object.assign({}, state, nextState)
     }
-    return currentState
+    // If redux already has a stored previous state, use that
+    // Otherwise, fallback to the user-provided state
+    return state || currentState
   }
 
   // Loop through the actions and proxy them to do awesome stuff
