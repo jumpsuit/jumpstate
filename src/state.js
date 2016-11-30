@@ -25,8 +25,8 @@ export default function (...args) {
       // Extend the state to avoid mutation
       return Object.assign({}, state, nextState)
     }
-    // If redux already has a stored previous state, use that
-    // Otherwise, fallback to the user-provided state
+    // If the store already has a stored previous state, use that
+    // Otherwise, fallback to the user-provided initial state
     return state || initialState
   }
 
