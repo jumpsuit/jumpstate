@@ -17,17 +17,26 @@ export default function (...args) {
   delete actions.initial
 
   const namedActions = {}
+  
+  let currentState
 
   const reducerWithActions = (state, action = {}) => {
     if (namedActions[action.type]) {
       // For namespaced actions, look for the prefixedAction
       const nextState = namedActions[action.type](state, action.payload)
       // Extend the state to avoid mutation
-      return Object.assign({}, state, nextState)
+      currentState = Object.assign({}, state, nextState)
     }
-    // If the store already has a stored previous state, use that
-    // Otherwise, fallback to the user-provided initial state
-    return state || initialState
+    else {
+      // If the store already has a stored previous state, use that
+      // Otherwise, fallback to the user-provided initial state
+      currentState = state || initialState
+    }
+    return currentState
+  }
+  
+  reducerWithActions.getState = () => {
+    return currentState
   }
 
   // Loop through the actions and proxy them to do awesome stuff
