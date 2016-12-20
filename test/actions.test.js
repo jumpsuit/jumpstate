@@ -1,5 +1,7 @@
 import Actions, { addAction, removeAction } from '../src/actions'
 
+/* global test, expect */
+
 test('Imports Actions', () => {
   expect(Actions).toEqual({})
 })
