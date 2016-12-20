@@ -2,7 +2,7 @@ import { EffectRegistry } from './effect'
 import { HookRegistry } from './hook'
 
 const warningFn = () => {
-  console.warn(`It looks like you\'re trying to use Jumpstate without the middleware! For Jumpstate to work, you need to run CreateJumpstateMiddleware() and apply it as middleware to your Redux Store.`)
+  console.warn(`It looks like you're trying to use Jumpstate without the middleware! For Jumpstate to work, you need to run CreateJumpstateMiddleware() and apply it as middleware to your Redux Store.`)
 }
 let resolvedDispatch = warningFn
 let resolvedGetState = warningFn

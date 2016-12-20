@@ -17,7 +17,7 @@ export default function (...args) {
   delete actions.initial
 
   const namedActions = {}
-  
+
   let currentState
 
   const reducerWithActions = (state, action = {}) => {
@@ -26,15 +26,14 @@ export default function (...args) {
       const nextState = namedActions[action.type](state, action.payload)
       // Extend the state to avoid mutation
       currentState = Object.assign({}, state, nextState)
-    }
-    else {
+    } else {
       // If the store already has a stored previous state, use that
       // Otherwise, fallback to the user-provided initial state
       currentState = state || initialState
     }
     return currentState
   }
-  
+
   reducerWithActions.getState = () => {
     return currentState
   }
