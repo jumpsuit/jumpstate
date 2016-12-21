@@ -1,5 +1,5 @@
 import { getState, dispatch } from './middleware'
-import Actions, { addAction, removeAction } from './actions'
+import { addAction, removeAction } from './actions'
 
 export const EffectRegistry = {}
 const effectPromises = {}
