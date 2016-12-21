@@ -17,5 +17,5 @@ export default function (callback) {
     HookRegistry.splice(HookRegistry.indexOf(callbackWrapper), 1)
   }
 
-  return callbackWrapper
+  return returnMethod
 }
