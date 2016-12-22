@@ -13,7 +13,7 @@ Jumpstate is a simple and powerful state management utility for Redux.
 #### Why do we love it?
 - It provides a clear and understandable way of managing state
 - It has massively reduced the amount of code we maintain
-- It's easy to learn/teach, and reads extremely well
+- It is easy to learn/teach, and reads extremely well
 - It has replaced the need for thunks and sagas.
 
 *Did you know? Jumpstate is the core state-manager for [Jumpsuit](https://github.com/jumpsuit/jumpsuit), So if you like what you see, you'll likely love Jumpsuit as well!*
@@ -82,8 +82,8 @@ const reducers = {
 
 const store = createStore(
   combineReducers(reducers),
-  // Just be sure to apply the Jumpstate Middlware :)
-  applyMiddlware(
+  // Just be sure to apply the Jumpstate Middleware :)
+  applyMiddleware(
     CreateJumpstateMiddleware()
   )
 )
@@ -235,7 +235,7 @@ const store = createStore({
   sandboxedCounter: SandboxedCounter
 })
 
-// Sandboxed actions are only accessible through the methods on it's reducer!
+// Sandboxed actions are only accessible through the methods on its reducer!
 SandboxedCounter.increment()
 ```
 
