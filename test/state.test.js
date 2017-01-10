@@ -156,40 +156,50 @@ describe('Sandboxed State', () => {
     const Jumpstate = require('../src/index')
     const State = Jumpstate.State
 
-    expect(State('sandboxReducer', {
-      initial: { value: 0 },
-      setValue (state, payload) {
-        return { value: payload }
-      }
-    })).not.toThrow()
+    expect(() => {
+      State('sandboxReducer', {
+        initial: { value: 0 },
+        setValue (state, payload) {
+          return { value: payload }
+        }
+      })
+    }).not.toThrow()
 
-    expect(State('', {
-      initial: { value: 0 },
-      setValue (state, payload) {
-        return { value: payload }
-      }
-    })).toThrow()
+    expect(() => {
+      State('', {
+        initial: { value: 0 },
+        setValue (state, payload) {
+          return { value: payload }
+        }
+      })
+    }).toThrow()
 
-    expect(State(() => { return 'sandboxedReducer' }, {
-      initial: { value: 0 },
-      setValue (state, payload) {
-        return { value: payload }
-      }
-    })).toThrow()
+    expect(() => {
+      State(() => { return 'sandboxedReducer' }, {
+        initial: { value: 0 },
+        setValue (state, payload) {
+          return { value: payload }
+        }
+      })
+    }).toThrow()
 
-    expect(State(null, {
-      initial: { value: 0 },
-      setValue (state, payload) {
-        return { value: payload }
-      }
-    })).toThrow()
+    expect(() => {
+      State(null, {
+        initial: { value: 0 },
+        setValue (state, payload) {
+          return { value: payload }
+        }
+      })
+    }).toThrow()
 
-    expect(State(9, {
-      initial: { value: 0 },
-      setValue (state, payload) {
-        return { value: payload }
-      }
-    })).toThrow()
+    expect(() => {
+      State(9, {
+        initial: { value: 0 },
+        setValue (state, payload) {
+          return { value: payload }
+        }
+      })
+    }).toThrow()
   })
 
   it('wont setup a global action creator', () => {
