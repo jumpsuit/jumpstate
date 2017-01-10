@@ -64,6 +64,7 @@ export default function (...args) {
     }
 
     // makes actions available directly when testing with an _ prefix
+    /* istanbul ignore if  */
     if (typeof process !== 'undefined' && process.env.NODE_ENV === 'testing') {
       reducerWithActions[`_${actionName}`] = actions[actionName]
     }
