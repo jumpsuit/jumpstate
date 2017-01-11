@@ -8,7 +8,7 @@ export default function (...args) {
   const actions = isSandboxed ? args[1] : args[0]
 
   // Checks
-  if (sandboxName && typeof sandboxName === 'string' && !sandboxName.length) {
+  if (isSandboxed && (typeof sandboxName !== 'string' || !sandboxName.length)) {
     throw new Error('Sandboxed states names must be a valid string')
   }
 
