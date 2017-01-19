@@ -23,9 +23,7 @@ export default function (...args) {
   const reducerWithActions = (state, action = {}) => {
     if (namedActions[action.type]) {
       // For namespaced actions, look for the prefixedAction
-      const nextState = namedActions[action.type](state, action.payload)
-      // Extend the state to avoid mutation
-      currentState = Object.assign({}, state, nextState)
+      currentState = namedActions[action.type](state, action.payload)
     } else {
       // If the store already has a stored previous state, use that
       // Otherwise, fallback to the user-provided initial state
