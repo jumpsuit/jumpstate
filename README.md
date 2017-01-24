@@ -150,7 +150,7 @@ Actions.increment()
 ## State Actions
 When you create a state, you assign action functions that can change that state in some way. When called, each action received the current `state`, and the `payload` that was passed with the call.
 
-It's important to immutability here, and not mutate the current state in these actions. Doing so will meddle with debugging, time-travel, and the underlying redux instance.
+It's important to maintain immutability here, and not mutate the current state in these actions. Doing so will meddle with debugging, time-travel, and the underlying redux instance.
 
 ```javascript
 increment (state, payload) {
