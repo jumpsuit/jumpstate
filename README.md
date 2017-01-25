@@ -212,10 +212,10 @@ Actions.myEffect()
 ```
 
 ## Sandboxed States
-Sandboxed states are namespaced and isolated from global events. Their state can only be modified by calling actions via their reducer methods. They also return a reducer that is redux-compatible out of the box.
+Sandboxed states are namespaced and isolated from global events. Their state can only be modified by calling actions via `Actions.prefixName.actionName()` or directly via their reducer methods. They also return a reducer that is redux-compatible out of the box.
 
 ```javascript
-import { State } from 'jumpstate'
+import { State, Actions } from 'jumpstate'
 
 // Create a sandboxed state by passing a name as the first parameter
 const SandboxedCounter = State('otherCounter', {
@@ -235,7 +235,9 @@ const store = createStore({
   sandboxedCounter: SandboxedCounter
 })
 
-// Sandboxed actions are only accessible through the methods on its reducer!
+// Sandboxed actions are accessible through the prefix on Actions or as methods on its reducer!
+Actions.otherCounter.increment()
+// or
 SandboxedCounter.increment()
 ```
 

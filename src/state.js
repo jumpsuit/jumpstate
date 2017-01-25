@@ -56,10 +56,8 @@ export default function (...args) {
     // Attach the method to the reducer
     reducerWithActions[actionName] = actionMethod
 
-    // If global, add the actionMethod to the global Actions list
-    if (!sandboxName) {
-      addAction(actionName, actionMethod)
-    }
+    // Add the actionMethod to the global Actions list
+    addAction(actionName, actionMethod, sandboxName)
 
     // makes actions available directly when testing with an _ prefix
     /* istanbul ignore if  */

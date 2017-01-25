@@ -50,7 +50,8 @@
     "parser": "babel-eslint",
     "ignore": [
       "lib",
-      "jumpstate.js"
+      "jumpstate.js",
+      "examples"
     ]
   },
   "bugs": {
