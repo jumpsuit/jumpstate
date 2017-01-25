@@ -187,27 +187,33 @@ postFetchEffect()
 ## Hooks
 A simple hook system that lets you monitor your state for actions or conditions and do just about anything you want.
 
-To create a global effect:
+To create a hook:
 ```javascript
 import { Hook } from 'jumpstate'
 
 // You can hook into any actions, even ones from external libraries!
-const myEffect = Effect((action, getState) => {
+const formLoadedHook = Hook((action, getState) => {
   if (action.type === 'redux-form/INITIALIZE') {
     console.log('A Redux-Form was just initialized with this payload', payload)
   }
 })
 
-// Load google analytics if it is not found
-const myEffect = Hook((action, getState) => {
-  GoogleAnalytics('send', 'page', payload.pathname)
+// Load google analytics if it is not yet loaded
+const analyticsLoadedHook = Hook((action, getState) => {
+  if (!getState().analytics.loaded)
+  Actions.analytics.load()
 })
+
+// Cancel a hook:
+formLoadedHook.cancel()
+analyticsLoadedHook.cancel()
 ```
 
 ## Actions
-All global actions (including effects) are available via the `Actions` object.
+All actions (including effects) are available via the `Actions` object.
 ```javascript
 Actions.increment()
+Actions.mySandbox.increment()
 Actions.myEffect()
 ```
 
