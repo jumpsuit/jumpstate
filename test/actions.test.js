@@ -31,7 +31,7 @@ test('Add action should prevent dups', () => {
   const cb = () => {}
   addAction('increment', cb)
   expect(Actions.increment).toBeDefined()
-  expect(() => { addAction('increment', cb) }).toThrow()
+  expect(addAction('increment', cb)).toBe(true)
 })
 
 test('Add sandbox action should prevent dups', () => {
@@ -40,7 +40,6 @@ test('Add sandbox action should prevent dups', () => {
   addAction('increment', cb, 'myBox')
   expect(Actions.increment).toBeDefined()
   expect(Actions.myBox.increment).toBeDefined()
-  expect(() => { addAction('increment', cb) }).toThrow()
   expect(() => { addAction('increment', cb, 'myBox') }).toThrow()
   expect(() => { addAction('myBox', cb) }).toThrow()
 })

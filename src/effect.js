@@ -1,5 +1,5 @@
 import { getState, dispatch } from './middleware'
-import { addAction, removeAction } from './actions'
+import { addEffect, removeAction } from './actions'
 
 export const EffectRegistry = {}
 const effectPromises = {}
@@ -31,7 +31,7 @@ export default function (name, callback) {
     })
   }
 
-  addAction(name, eventDispatcher)
+  addEffect(name, eventDispatcher)
 
   eventDispatcher.cancel = () => {
     delete EffectRegistry[name]

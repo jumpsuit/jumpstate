@@ -17,10 +17,22 @@ export function addAction (actionName, action, sandboxName) {
     return
   }
 
+  // No need to add the action a second time.
+  if (typeof Actions[actionName] === 'object') {
+    throw new Error(`An action called "${actionName}" in the ${sandboxName} sandbox already exists! Please pick another action name!`)
+  }
   if (Actions[actionName]) {
-    throw new Error(`An action called "${actionName}" already exists! Please pick another name!`)
+    return true
   }
   Actions[actionName] = payload => action(payload)
+}
+
+export function addEffect (effectName, action) {
+  // Make sure the effect name is unique
+  if (Actions[effectName]) {
+    throw new Error(`An action called "${effectName}" already exists! Please pick another name for this effect!`)
+  }
+  Actions[effectName] = payload => action(payload)
 }
 
 export function removeAction (actionName, sandboxName) {
