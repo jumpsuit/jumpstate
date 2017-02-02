@@ -1,4 +1,4 @@
-import Actions, { addAction, removeAction, reset } from '../src/actions'
+import { Actions, ActionCreators, addAction, removeAction, reset } from '../src/actions'
 
 /* global test, expect, beforeEach, jest */
 
@@ -13,18 +13,23 @@ test('Imports Actions', () => {
 
 test('Add/Remove Action', () => {
   const cb = () => {}
-  addAction('increment', cb)
+  const cbc = () => 'actionCreator'
+  addAction('increment', cb, cbc)
   expect(Actions.increment).toBeDefined()
+  expect(ActionCreators.increment).toBeDefined()
   removeAction('increment')
   expect(Actions.increment).toBeUndefined()
+  expect(ActionCreators.increment).toBeUndefined()
 })
 
 test('Add/Remove Sandboxed Action', () => {
   const cb = () => {}
-  addAction('increment', cb, 'myBox')
+  addAction('increment', cb, () => null, 'myBox')
   expect(Actions.myBox.increment).toBeDefined()
+  expect(ActionCreators.myBox.increment).toBeDefined()
   removeAction('increment', 'myBox')
   expect(Actions.myBox.increment).toBeUndefined()
+  expect(ActionCreators.myBox.increment).toBeUndefined()
 })
 
 test('Add action should prevent dups', () => {
@@ -37,9 +42,9 @@ test('Add action should prevent dups', () => {
 test('Add sandbox action should prevent dups', () => {
   const cb = () => {}
   addAction('increment', cb)
-  addAction('increment', cb, 'myBox')
+  addAction('increment', cb, () => null, 'myBox')
   expect(Actions.increment).toBeDefined()
   expect(Actions.myBox.increment).toBeDefined()
-  expect(() => { addAction('increment', cb, 'myBox') }).toThrow()
+  expect(() => { addAction('increment', cb, () => null, 'myBox') }).toThrow()
   expect(() => { addAction('myBox', cb) }).toThrow()
 })

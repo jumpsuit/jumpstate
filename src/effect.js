@@ -19,19 +19,28 @@ export default function (name, callback) {
 
   EffectRegistry[name] = callbackWrapper
 
+  const actionCreator = (payload, ext = {}) => {
+    const meta = {...ext}
+    delete meta.type
+    delete meta.payload
+    return {
+      type: name,
+      payload,
+      ...meta
+    }
+  }
+
   const eventDispatcher = (payload) => {
     const ts = Date.now()
     return new Promise((resolve, reject) => {
       effectPromises[ts] = { resolve, reject }
-      dispatch({
-        type: name,
-        payload,
-        ts
-      })
+      dispatch(actionCreator(payload, { ts }))
     })
   }
 
-  addEffect(name, eventDispatcher)
+  eventDispatcher.actionCreator = actionCreator
+
+  addEffect(name, eventDispatcher, actionCreator)
 
   eventDispatcher.cancel = () => {
     delete EffectRegistry[name]

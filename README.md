@@ -247,6 +247,61 @@ Actions.otherCounter.increment()
 SandboxedCounter.increment()
 ```
 
+## Action Creators
+Jumpstate automatically provides you with access to the action creators that power your actions. Every action has a corresponding action creator method on the importable `ActionCreators` object.
+
+```javascript
+import {State, Actions, Effect, ActionCreators}
+
+const globalCounterReducer = State({
+  initial: { count: 0 },
+  increment (state, payload) {
+    return { count: state.count + 1 }
+  }
+})
+
+const myCounterReducer = State('myCounter', {
+  initial: { count: 0 },
+  increment (state, payload) {
+    return { count: state.count + 1 }
+  }
+})
+
+const incrementAsyncEffect = Effect('incrementAsync', () => setTimeout(() => Actions.increment(), 1000))
+
+// All of the available action creators are available...
+
+// On The ActionCreators object:
+ActionsCreators.increment(2) === {
+  type: 'increment',
+  payload: 2
+}
+ActionsCreators.myCounter.increment(2) === {
+  type: 'myCounter_increment',
+  payload: 2
+}
+ActionsCreators.incrementAsync(2) === {
+  type: 'incrementAsync',
+  payload: 2
+}
+
+// And on the reducer/effect the action belongs to:
+globalCounterReducer.actionCreators.increment(2) === {
+  type: 'increment',
+  payload: 2
+}
+myCounterReducer.actionCreators.increment(2) === {
+  type: 'myCounter_increment',
+  payload: 2
+}
+incrementAsyncEffect.actionCreator.increment(2) === {
+  type: 'myCounter_increment',
+  payload: 2
+}
+```
+
+A common patter in redux is to export your actionCreators and bind/utilize them in your components. Now you can!
+```
 
 ### Removing/Cancelling Effects and Hooks
 If you know you are done with an effect or hook and want to free up some memory, you can cancel them:

@@ -1,7 +1,7 @@
 import State from './state'
 import Effect from './effect'
 import Hook from './hook'
-import Actions from './actions'
+import { Actions, ActionCreators } from './actions'
 import CreateJumpstateMiddleware, { getState, dispatch } from './middleware'
 
 export {
@@ -9,6 +9,7 @@ export {
   Effect,
   Hook,
   Actions,
+  ActionCreators,
   CreateJumpstateMiddleware,
   getState,
   dispatch

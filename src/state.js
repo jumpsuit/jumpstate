@@ -36,6 +36,8 @@ export default function (...args) {
     return currentState
   }
 
+  reducerWithActions.actionCreators = {}
+
   // Loop through the actions and proxy them to do awesome stuff
   Object.keys(actions).forEach((actionName) => {
     const resolvedActionName = sandboxName ? `${sandboxName}_${actionName}` : actionName
@@ -43,21 +45,33 @@ export default function (...args) {
     // Keep a reference to the original action for the reducer to reference
     namedActions[resolvedActionName] = actions[actionName]
 
-    // Create a namespaced action
-    const actionMethod = (payload) => {
-      const action = {
+    // Create the actionCreator
+    const actionCreator = (payload, ext = {}) => {
+      const meta = {...ext}
+      delete meta.type
+      delete meta.payload
+      return {
         type: resolvedActionName,
-        payload
+        payload,
+        ...meta
       }
+    }
+
+    // Attach the action creator to the reducer's actionCreator List
+    reducerWithActions.actionCreators[actionName] = actionCreator
+
+    // Create a shorthand action dispather method
+    const actionMethod = (payload) => {
+      const action = actionCreator(payload)
       // Otherwise, proxy the action through the attached redux dispatcher
       return dispatch(action)
     }
 
-    // Attach the method to the reducer
+    // Attach the shorthand method to the reducer
     reducerWithActions[actionName] = actionMethod
 
-    // Add the actionMethod to the global Actions list
-    addAction(actionName, actionMethod, sandboxName)
+    // Add the shorthand action and the actionCreator to the global Actions and ActionCreators list
+    addAction(actionName, actionMethod, actionCreator, sandboxName)
 
     // makes actions available directly when testing with an _ prefix
     /* istanbul ignore if  */
