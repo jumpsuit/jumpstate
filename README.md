@@ -249,9 +249,10 @@ SandboxedCounter.increment()
 
 ## Action Creators
 Jumpstate automatically provides you with access to the action creators that power your actions. Every action has a corresponding action creator method on:
+
 1. The importable `ActionCreators` object
-1. The reducer that the action belongs to via `myReducer.actionCreators`
-1. The effect via `myEffect.actionCreator`
+2. The reducer that the action belongs to via `myReducer.actionCreators`
+3. The effect via `myEffect.actionCreator`
 
 ```javascript
 import {State, Actions, Effect, ActionCreators}
