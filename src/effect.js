@@ -11,10 +11,13 @@ export default function (name, callback) {
   }
 
   const callbackWrapper = (action) => {
-    const { payload, ts } = action
-    Promise.resolve(callback(payload, getState, dispatch))
-      .then(effectPromises[ts].resolve)
-      .catch(effectPromises[ts].reject)
+    const { payload, _jumpstateTimestamp } = action
+    const response = callback(payload, getState, dispatch)
+    if (_jumpstateTimestamp) {
+      Promise.resolve(response)
+        .then(effectPromises[_jumpstateTimestamp].resolve)
+        .catch(effectPromises[_jumpstateTimestamp].reject)
+    }
   }
 
   EffectRegistry[name] = callbackWrapper
@@ -31,10 +34,10 @@ export default function (name, callback) {
   }
 
   const eventDispatcher = (payload) => {
-    const ts = Date.now()
+    const _jumpstateTimestamp = Date.now()
     return new Promise((resolve, reject) => {
-      effectPromises[ts] = { resolve, reject }
-      dispatch(actionCreator(payload, { ts }))
+      effectPromises[_jumpstateTimestamp] = { resolve, reject }
+      dispatch(actionCreator(payload, { _jumpstateTimestamp }))
     })
   }
 
