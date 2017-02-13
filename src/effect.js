@@ -17,6 +17,9 @@ export default function (name, callback) {
       Promise.resolve(response)
         .then(effectPromises[_jumpstateTimestamp].resolve)
         .catch(effectPromises[_jumpstateTimestamp].reject)
+        .then(() => {
+          delete effectPromises[_jumpstateTimestamp]
+        })
     }
   }
 
