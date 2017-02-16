@@ -16,11 +16,8 @@ export let getState = (...args) => {
 
 export default function createMiddleware (options) {
   return (stateUtils) => {
-    // If we haven't lifted the stores dispatcher yet, do it just this once
-    if (resolvedDispatch === warningFn) {
-      resolvedDispatch = stateUtils.dispatch
-      resolvedGetState = stateUtils.getState
-    }
+    resolvedDispatch = stateUtils.dispatch
+    resolvedGetState = stateUtils.getState
     return (next) => {
       return action => {
         const result = next(action)
