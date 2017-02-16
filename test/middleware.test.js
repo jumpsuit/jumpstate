@@ -29,6 +29,10 @@ describe('CreateJumpstateMiddleware', () => {
 
     Reducer.setValue(1)
 
+    let state = Store.getState()
+
+    expect(state.value).toEqual(1)
+
     Store = Redux.createStore(
       Reducer,
       Redux.applyMiddleware(
@@ -38,7 +42,7 @@ describe('CreateJumpstateMiddleware', () => {
 
     Reducer.setValue(2)
 
-    const state = Store.getState()
+    state = Store.getState()
 
     expect(state.value).toEqual(2)
   })
