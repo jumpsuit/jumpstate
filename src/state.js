@@ -1,5 +1,9 @@
-import { dispatch } from './middleware'
-import { addAction } from './actions'
+import {
+  dispatch
+} from './middleware'
+import {
+  addAction
+} from './actions'
 
 export default function (...args) {
   // Detect Optional Config Object
@@ -37,6 +41,7 @@ export default function (...args) {
   }
 
   reducerWithActions.actionCreators = {}
+  reducerWithActions.actionTypes = {}
 
   // Loop through the actions and proxy them to do awesome stuff
   Object.keys(actions).forEach((actionName) => {
@@ -47,7 +52,8 @@ export default function (...args) {
 
     // Create the actionCreator
     const actionCreator = (payload, ext = {}) => {
-      const meta = {...ext}
+      const meta = { ...ext
+      }
       delete meta.type
       delete meta.payload
       return {
@@ -59,6 +65,9 @@ export default function (...args) {
 
     // Attach the action creator to the reducer's actionCreator List
     reducerWithActions.actionCreators[actionName] = actionCreator
+
+    // Attach the action type to the reducer's actionType List
+    reducerWithActions.actionTypes[actionName] = resolvedActionName
 
     // Create a shorthand action dispather method
     const actionMethod = (payload) => {

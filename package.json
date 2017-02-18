@@ -54,6 +54,7 @@
       "examples"
     ]
   },
+  "typings": "./index.d.ts",
   "bugs": {
     "url": "https://github.com/jumpsuit/jumpstate/issues"
   },
