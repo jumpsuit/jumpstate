@@ -3,6 +3,10 @@ import { addEffect, removeAction } from './actions'
 
 export const EffectRegistry = {}
 const effectPromises = {}
+const guidv4 = () => {
+  function s4 () { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
+}
 
 export default function (name, callback) {
   // Make sure the action name is a valid string
@@ -37,7 +41,7 @@ export default function (name, callback) {
   }
 
   const eventDispatcher = (payload) => {
-    const _jumpstateTimestamp = Date.now()
+    const _jumpstateTimestamp = guidv4()
     return new Promise((resolve, reject) => {
       effectPromises[_jumpstateTimestamp] = { resolve, reject }
       dispatch(actionCreator(payload, { _jumpstateTimestamp }))
