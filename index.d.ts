@@ -13,6 +13,15 @@ export type IReducer<A> = {
 
 type IReduce<S> = (state: S, payload?: any) => S;
 
+
+/**
+ * A jumpstate sandboxed state object that returns a reducer with typed actionCreators and actionTypes
+ *
+ * @template A Action creators config
+ * @template S State object type.
+ * @param name string namespace for the sandboxe
+ * @param config object defines the reducers and intial state
+ */
 export type IState = {
   <A, S>(name: string, config: {[P in keyof A]: IReduce<S>} & IIntialState<S>): IReducer<A>;
 };
