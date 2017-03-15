@@ -1,21 +1,30 @@
-type IIntialState = {
-  initial: any;
+type IIntialState<S> = {
+  initial: S;
 };
 
-export type IReducer<S> = {
+export type IReducer<A> = {
   actionCreators: {
-    [P in keyof S]: S[P];
+    [P in keyof A]: A[P];
   };
   actionTypes: {
-    [P in keyof S]: P;
+    [P in keyof A]: P;
   }
 };
 
-type a = (state: any, payload?: any) => void;
+type IReduce<S> = (state: S, payload?: any) => S;
+
+
+/**
+ * A jumpstate sandboxed state object that returns a reducer with typed actionCreators and actionTypes
+ *
+ * @template A Action creators config
+ * @template S State object type.
+ * @param name string namespace for the sandbox
+ * @param config object defines the reducers and intial state
+ */
 export type IState = {
-  <S>(name: string, config: {[P in keyof S]: a} & IIntialState): IReducer<S>;
+  <A, S>(name: string, config: {[P in keyof A]: IReduce<S>} & IIntialState<S>): IReducer<A>;
 };
 
 
 export const State: IState;
-
