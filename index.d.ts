@@ -19,7 +19,7 @@ type IReduce<S> = (state: S, payload?: any) => S;
  *
  * @template A Action creators config
  * @template S State object type.
- * @param name string namespace for the sandboxe
+ * @param name string namespace for the sandbox
  * @param config object defines the reducers and intial state
  */
 export type IState = {
