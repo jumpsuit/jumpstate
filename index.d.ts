@@ -28,4 +28,3 @@ export type IState = {
 
 
 export const State: IState;
-
