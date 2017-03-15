@@ -52,7 +52,7 @@ export default function (...args) {
 
     // Create the actionCreator
     const actionCreator = (payload, ext = {}) => {
-      const meta = { ...ext}
+      const meta = {...ext}
       delete meta.type
       delete meta.payload
       return {
