@@ -28,7 +28,7 @@ $ npm install jumpstate --save
 
 ```javascript
 // Import Jumpstate
-import { State, Effect, Actions, dispatch, getState, CreateJumpstateMiddleware } from 'jumpstate'
+import { State, Effect, Actions, Hook, dispatch, getState, CreateJumpstateMiddleware } from 'jumpstate'
 
 // Create a state with some actions
 const Counter = State({
@@ -189,7 +189,7 @@ A simple hook system that lets you monitor your state for actions or conditions 
 
 To create a hook:
 ```javascript
-import { Hook } from 'jumpstate'
+import { Hook, Actions } from 'jumpstate'
 
 // You can hook into any actions, even ones from external libraries!
 const formLoadedHook = Hook((action, getState) => {
@@ -255,7 +255,7 @@ Jumpstate automatically provides you with access to the action creators that pow
 1. The effect via `myEffect.actionCreator`
 
 ```javascript
-import {State, Actions, Effect, ActionCreators}
+import { State, Actions, Effect, ActionCreators } from 'jumpstate'
 
 const globalCounterReducer = State({
   initial: { count: 0 },
@@ -276,15 +276,15 @@ const incrementAsyncEffect = Effect('incrementAsync', () => setTimeout(() => Act
 // All of the available action creators are available...
 
 // On The ActionCreators object:
-ActionsCreators.increment(2) === {
+ActionCreators.increment(2) === {
   type: 'increment',
   payload: 2
 }
-ActionsCreators.myCounter.increment(2) === {
+ActionCreators.myCounter.increment(2) === {
   type: 'myCounter_increment',
   payload: 2
 }
-ActionsCreators.incrementAsync(2) === {
+ActionCreators.incrementAsync(2) === {
   type: 'incrementAsync',
   payload: 2
 }
