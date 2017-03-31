@@ -304,7 +304,7 @@ incrementAsyncEffect.actionCreator.increment(2) === {
 }
 ```
 
-A common patter in redux is to export your actionCreators and bind/utilize them in your components. Now you can!
+A common pattern in redux is to export your actionCreators and bind/utilize them in your components. Now you can!
 ```javascript
 // Examples are on the way :)
 ```
