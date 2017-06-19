@@ -1,4 +1,4 @@
-type IIntialState<S> = {
+type IInitialState<S> = {
   initial: S;
 };
 
@@ -23,7 +23,7 @@ type IReduce<S> = (state: S, payload?: any) => S;
  * @param config object defines the reducers and intial state
  */
 export type IState = {
-  <A, S>(name: string, config: {[P in keyof A]: IReduce<S>} & IIntialState<S>): IReducer<A>;
+  <A, S>(name: string, config: {[P in keyof A]: IReduce<S>} & IInitialState<S>): IReducer<A>;
 };
 
 
