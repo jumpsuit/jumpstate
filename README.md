@@ -1,5 +1,5 @@
 # Announcement
-Jumpstate is now officially supported by [Decipher](http://deciphernow.com/) however Jumpsuit is still depreciated.
+Jumpstate is now officially supported by [Decipher](http://deciphernow.com/) however Jumpsuit is still deprecated.
 
 ## Need some consolation? Join us on Slack!
 - [Join Here](https://react-chat-signup.herokuapp.com/)
