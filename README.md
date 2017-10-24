@@ -1,5 +1,5 @@
 # Announcement
-Jumpstate is now officially supported by [Decipher](http://deciphernow.com/)!
+Jumpstate is now officially maintained by [Decipher](http://deciphernow.com/)!
 
 ## Join us on Slack!
 - [Join Here](https://react-chat-signup.herokuapp.com/)
