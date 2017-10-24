@@ -1,6 +1,5 @@
 # Announcement
-
-### Jumpstate (along with jumpsuit) is now offically *DEPRECATED*. Thanks for your support over the life of this library. It served a great purpose, but we now are strongly urging you to use idiomatic (vanilla) redux in conjunction with redux-thunk. It will most certainly improve your apps testability, stability, and scalability.
+Jumpstate is now officially supported by [Decipher](http://deciphernow.com/) however Jumpsuit is still deprecated.
 
 ## Need some consolation? Join us on Slack!
 - [Join Here](https://react-chat-signup.herokuapp.com/)
@@ -8,7 +7,7 @@
 
 ## Team
 
-[![Tanner Linsley](https://avatars1.githubusercontent.com/u/5580297?v=3&s=100)](https://github.com/tannerlinsley) | [![Jason Maurer](https://avatars2.githubusercontent.com/u/911274?v=3&s=100)](https://github.com/jsonmaur)
+[![Decipher Technology Studios](https://avatars2.githubusercontent.com/u/13125018?s=100&v=4](https://github.com/DecipherNow) | [![Tanner Linsley](https://avatars1.githubusercontent.com/u/5580297?v=3&s=100)](https://github.com/tannerlinsley) | [![Jason Maurer](https://avatars2.githubusercontent.com/u/911274?v=3&s=100)](https://github.com/jsonmaur)
 :-:|:-:
 [Tanner Linsley](https://github.com/tannerlinsley) | [Jason Maurer](https://github.com/jsonmaur)
 
