@@ -1,7 +1,7 @@
 # Announcement
-Jumpstate is now officially supported by [Decipher](http://deciphernow.com/) however Jumpsuit is still deprecated.
+Jumpstate is now officially supported by [Decipher](http://deciphernow.com/) though Jumpsuit is still deprecated.
 
-## Need some consolation? Join us on Slack!
+## Join us on Slack!
 - [Join Here](https://react-chat-signup.herokuapp.com/)
 - [Chat Here](https://react-tools.slack.com/)
 
@@ -11,7 +11,7 @@ Jumpstate is now officially supported by [Decipher](http://deciphernow.com/) how
 
 [Decipher](https://github.com/DecipherNow) | [Tanner Linsley](https://github.com/tannerlinsley) | [Jason Maurer](https://github.com/jsonmaur)
 
-## Was previously used by
+## Previously used by
 
 <a href='https://nozzle.io'>
   <img src='https://nozzle.io/img/logo-blue.png' alt='Nozzle Logo' style='width:300px;'/>
