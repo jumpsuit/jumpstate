@@ -16,7 +16,7 @@ Jumpstate is a simple and powerful state management utility for Redux.
 - It is easy to learn/teach, and reads extremely well
 - It has replaced the need for thunks and sagas.
 
-*Jumpstate is now officially maintained by [Decipher](http://deciphernow.com/)!
+*Jumpstate is now officially maintained by [Decipher](http://deciphernow.com/)!*
 
 ## Installation
 
@@ -135,7 +135,7 @@ const counterReducer = State({
   },
   decrement (state, payload) {
     return { count: state.count - 1 }
-  },
+  }
 })
 
 // Now you can use the reducer it returned in your redux setup
