@@ -30,13 +30,11 @@ export default function (name, callback) {
   EffectRegistry[name] = callbackWrapper
 
   const actionCreator = (payload, ext = {}) => {
-    const meta = {...ext}
-    delete meta.type
-    delete meta.payload
+    const getMeta = ({ type, payload, ...meta }) => meta
     return {
       type: name,
       payload,
-      ...meta
+      getMeta(ext)
     }
   }
 
